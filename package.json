@@ -1,9 +1,12 @@
 {
-  "name": "feed",
-  "version": "4.2.2",
+  "name": "@fuyun/feed",
+  "version": "1.0.0",
   "description": "Feed is a RSS, Atom and JSON feed generator for Node.js, making content syndication simple and intuitive!",
-  "homepage": "https://github.com/jpmonette/feed",
-  "author": "Jean-Philippe Monette <contact@jpmonette.net>",
+  "homepage": "https://github.com/ifuyun/feed",
+  "author": {
+    "name": "Fuyun",
+    "url": "https://www.ifuyun.com"
+  },
   "license": "MIT",
   "main": "lib/feed.js",
   "types": "lib/feed.d.ts",
@@ -46,11 +49,11 @@
     "node": ">=0.4.0"
   },
   "bugs": {
-    "url": "https://github.com/jpmonette/feed/issues"
+    "url": "https://github.com/ifuyun/feed/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jpmonette/feed.git"
+    "url": "https://github.com/ifuyun/feed.git"
   },
   "packageManager": "yarn@3.2.1"
 }

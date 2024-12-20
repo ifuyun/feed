@@ -17,6 +17,7 @@ export interface Item {
 
   author?: Author[];
   contributor?: Author[];
+  creator?: string;
 
   published?: Date;
   copyright?: string;
@@ -64,6 +65,10 @@ export interface FeedOptions {
   image?: string;
   favicon?: string;
   copyright: string;
+
+  managingEditor?: string;
+  webMaster?: string;
+  dcExtension?: boolean;
 }
 
 export interface Extension {

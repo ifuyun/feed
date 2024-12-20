@@ -10,7 +10,6 @@ import { sanitize } from "./utils";
 export default (ins: Feed) => {
   const { options } = ins;
   let isAtom = false;
-  let isContent = false;
 
   const base: any = {
     _declaration: { _attributes: { version: "1.0", encoding: "utf-8" } },
@@ -21,7 +20,7 @@ export default (ins: Feed) => {
         link: { _text: sanitize(options.link) },
         description: { _text: options.description },
         lastBuildDate: { _text: options.updated ? options.updated.toUTCString() : new Date().toUTCString() },
-        docs: { _text: options.docs ? options.docs : "https://validator.w3.org/feed/docs/rss2.html" },
+        docs: { _text: options.docs ? options.docs : "https://cyber.harvard.edu/rss/rss.html" },
         generator: { _text: options.generator || generator },
       },
     },
@@ -29,7 +28,7 @@ export default (ins: Feed) => {
 
   /**
    * Channel language
-   * https://validator.w3.org/feed/docs/rss2.html#ltlanguagegtSubelementOfLtchannelgt
+   * https://cyber.harvard.edu/rss/rss.html#ltlanguagegtSubelementOfLtchannelgt
    */
   if (options.language) {
     base.rss.channel.language = { _text: options.language };
@@ -37,7 +36,7 @@ export default (ins: Feed) => {
 
   /**
    * Channel ttl
-   * https://validator.w3.org/feed/docs/rss2.html#ltttlgtSubelementOfLtchannelgt
+   * https://cyber.harvard.edu/rss/rss.html#ltttlgtSubelementOfLtchannelgt
    */
   if (options.ttl) {
     base.rss.channel.ttl = { _text: options.ttl };
@@ -45,7 +44,7 @@ export default (ins: Feed) => {
 
   /**
    * Channel Image
-   * https://validator.w3.org/feed/docs/rss2.html#ltimagegtSubelementOfLtchannelgt
+   * https://cyber.harvard.edu/rss/rss.html#ltimagegtSubelementOfLtchannelgt
    */
   if (options.image) {
     base.rss.channel.image = {
@@ -57,15 +56,23 @@ export default (ins: Feed) => {
 
   /**
    * Channel Copyright
-   * https://validator.w3.org/feed/docs/rss2.html#optionalChannelElements
+   * https://cyber.harvard.edu/rss/rss.html#optionalChannelElements
    */
   if (options.copyright) {
     base.rss.channel.copyright = { _text: options.copyright };
   }
 
+  if (options.managingEditor) {
+    base.rss.channel.managingEditor = { _text: options.managingEditor };
+  }
+
+  if (options.webMaster) {
+    base.rss.channel.webMaster = { _text: options.webMaster };
+  }
+
   /**
    * Channel Categories
-   * https://validator.w3.org/feed/docs/rss2.html#comments
+   * https://cyber.harvard.edu/rss/rss.html#comments
    */
   ins.categories.map((category) => {
     if (!base.rss.channel.category) {
@@ -111,7 +118,7 @@ export default (ins: Feed) => {
 
   /**
    * Channel Categories
-   * https://validator.w3.org/feed/docs/rss2.html#hrelementsOfLtitemgt
+   * https://cyber.harvard.edu/rss/rss.html#hrelementsOfLtitemgt
    */
   base.rss.channel.item = [];
 
@@ -147,12 +154,11 @@ export default (ins: Feed) => {
     }
 
     if (entry.content) {
-      isContent = true;
       item["content:encoded"] = { _cdata: entry.content };
     }
     /**
      * Item Author
-     * https://validator.w3.org/feed/docs/rss2.html#ltauthorgtSubelementOfLtitemgt
+     * https://cyber.harvard.edu/rss/rss.html#ltauthorgtSubelementOfLtitemgt
      */
     if (Array.isArray(entry.author)) {
       item.author = [];
@@ -162,9 +168,14 @@ export default (ins: Feed) => {
         }
       });
     }
+
+    if (entry.creator) {
+      item["dc:creator"] = { _cdata: entry.creator };
+    }
+
     /**
      * Item Category
-     * https://validator.w3.org/feed/docs/rss2.html#ltcategorygtSubelementOfLtitemgt
+     * https://cyber.harvard.edu/rss/rss.html#ltcategorygtSubelementOfLtitemgt
      */
     if (Array.isArray(entry.category)) {
       item.category = [];
@@ -175,7 +186,7 @@ export default (ins: Feed) => {
 
     /**
      * Item Enclosure
-     * https://validator.w3.org/feed/docs/rss2.html#ltenclosuregtSubelementOfLtitemgt
+     * https://cyber.harvard.edu/rss/rss.html#ltenclosuregtSubelementOfLtitemgt
      */
     if (entry.enclosure) {
       item.enclosure = formatEnclosure(entry.enclosure);
@@ -196,7 +207,7 @@ export default (ins: Feed) => {
     base.rss.channel.item.push(item);
   });
 
-  if (isContent) {
+  if (options.dcExtension) {
     base.rss._attributes["xmlns:dc"] = "http://purl.org/dc/elements/1.1/";
     base.rss._attributes["xmlns:content"] = "http://purl.org/rss/1.0/modules/content/";
   }
